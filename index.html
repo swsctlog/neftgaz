@@ -9,71 +9,29 @@
     <style>
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
+            background-color: #001f3d; /* Тёмно-синий фон */
+            color: white;
             height: 100%;
+            overflow-x: hidden;
         }
         .header {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            background-color: #ffffff;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-        }
-        .navbar-brand {
-            font-size: 20px;
+            background-color: #001f3d; /* Тёмно-синий цвет */
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
             font-weight: bold;
-            color: #333;
-        }
-        .menu-container {
-            cursor: pointer;
-        }
-        .hamburger div {
-            width: 25px;
-            height: 3px;
-            background-color: #000;
-            margin: 4px 0;
-            border-radius: 2px;
-        }
-        .menu {
-            display: none;
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 250px;
-            height: 100%;
-            background-color: #ffffff;
-            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
-            z-index: 2000;
-            padding: 20px;
-        }
-        .menu.active {
-            display: block;
-        }
-        .menu button {
-            display: block;
-            width: 100%;
-            margin-bottom: 10px;
-            padding: 10px;
-            font-size: 16px;
-            text-align: left;
-            background-color: #f0f0f0;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .menu button:hover {
-            background-color: #e0e0e0;
+            font-size: 24px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: top 0.3s;
         }
         .content-container {
-            margin-top: 60px;
+            margin-top: 80px;
             padding: 20px;
         }
         .iframe-container {
@@ -83,88 +41,49 @@
         }
         iframe {
             width: 100%;
-            height: 250px;
+            height: 100vh;
             border: none;
-            overflow:hidden;
         }
-        .navigation-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
-
-        /* Позиционирование кнопок поверх второго слайда */
-        #leftButton, #rightButton {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 24px;
-            padding: 10px;
-            width: 50px;
-            height: 50px;
-            background-color: rgba(0, 0, 0, 0.3);
+        .category-title {
+            font-size: 32px;
+            text-align: center;
+            margin: 30px 0;
+            font-family: 'Arial', sans-serif;
+            text-transform: uppercase;
             color: white;
-            border-radius: 50%;
-            border: 2px solid #ddd;
-            z-index: 10;
         }
-
-        #leftButton {
-            left: -15px;
-            top: -400px;
+        .slide-number {
+            font-size: 18px;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            font-weight: bold;
+            text-shadow: 1px 1px 3px black;
         }
-
-        #rightButton {
-            right: -15px;
-            top: -400px;
+        .iframe-group {
+            position: relative;
         }
-
     </style>
 </head>
 <body>
-    <!-- Шапка -->
-    <header class="header">
-        <div class="navbar">
-            <div class="navbar-brand">UZNEFTGAZ</div>
-            <div class="menu-container" onclick="toggleMenu()">
-                <div class="hamburger">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
-            </div>
-        </div>
+    <header class="header" id="header">
+        UZNEFTGAZ
     </header>
 
-    <!-- Меню -->
-    <div class="menu" id="menu">
-        <button onclick="loadSource(1)">Часовой анализ</button>
-        <button onclick="loadSource(2)">Переработка</button>
-        <button onclick="loadSource(3)">ОЭКС</button>
-    </div>
-
-    <!-- Основное содержимое -->
     <div class="content-container">
         <div id="iframeGroup" class="iframe-container">
-            <!-- Iframe-здесь будет динамический контент -->
-        </div>
-        <div class="navigation-container" id="navigationContainer">
-            <!-- Кнопки остаются поверх слайдов -->
-            <button class="btn btn-secondary" id="leftButton" onclick="prevGroup()">с</button>
-            <button class="btn btn-secondary" id="rightButton" onclick="nextGroup()">п</button>
+            <!-- Слайды будут загружаться сюда -->
         </div>
     </div>
 
-    <!-- JavaScript -->
     <script>
-        const menu = document.getElementById('menu');
+        const header = document.getElementById('header');
         const iframeGroup = document.getElementById('iframeGroup');
-        const leftButton = document.getElementById('leftButton');
-        const rightButton = document.getElementById('rightButton');
-        let currentGroupIndex = 0;
 
         const iframeSets = [
             {
+                category: 'Часовой анализ',
                 urls: [
                     "https://lookerstudio.google.com/embed/reporting/150c3245-728e-484a-950b-fb74a73c9b9c/page/p_cqe8vg9fnd",
                     "https://lookerstudio.google.com/embed/reporting/150c3245-728e-484a-950b-fb74a73c9b9c/page/iqA7D",
@@ -176,6 +95,7 @@
                 ]
             },
             {
+                category: 'Переработка',
                 urls: [
                     "https://lookerstudio.google.com/embed/reporting/ab70d9ea-3fb1-458c-a174-65efbb09cb1e/page/gDM8D",
                     "https://lookerstudio.google.com/embed/reporting/ab70d9ea-3fb1-458c-a174-65efbb09cb1e/page/p_m2egp76end",
@@ -195,6 +115,7 @@
                 ]
             },
             {
+                category: 'ОЭКС',
                 urls: [
                     "https://lookerstudio.google.com/embed/reporting/12bc2c8e-8ae9-476b-ab1f-dfec3eaa627d/page/p_7hroj3c3md",
                     "https://lookerstudio.google.com/embed/reporting/12bc2c8e-8ae9-476b-ab1f-dfec3eaa627d/page/p_z9ca5kbamd",
@@ -207,49 +128,47 @@
             }
         ];
 
-        function toggleMenu() {
-            menu.classList.toggle('active');
-        }
+        function loadAllSlides() {
+            iframeSets.forEach(set => {
+                const categoryTitle = document.createElement('div');
+                categoryTitle.classList.add('category-title');
+                categoryTitle.textContent = set.category;
+                iframeGroup.appendChild(categoryTitle);
 
-        function loadSource(resourceIndex) {
-            const resource = iframeSets[resourceIndex - 1];
-            currentGroupIndex = 0;
-            updateIframes(resource.urls);
-            toggleMenu();
-        }
+                set.urls.forEach((url, index) => {
+                    const iframeGroupContainer = document.createElement('div');
+                    iframeGroupContainer.classList.add('iframe-group');
 
-        function updateIframes(urls) {
-            iframeGroup.innerHTML = '';
-            const start = currentGroupIndex * 3;
-            const end = start + 3;
-            const currentUrls = urls.slice(start, end);
+                    const iframe = document.createElement('iframe');
+                    iframe.src = url;
+                    iframe.loading = 'lazy';
 
-            currentUrls.forEach(url => {
-                const iframe = document.createElement('iframe');
-                iframe.src = url;
-                iframe.loading = 'lazy';
-                iframeGroup.appendChild(iframe);
+                    const slideNumber = document.createElement('div');
+                    slideNumber.classList.add('slide-number');
+                    slideNumber.textContent = `${index + 1}`;
+
+                    iframeGroupContainer.appendChild(slideNumber);
+                    iframeGroupContainer.appendChild(iframe);
+
+                    iframeGroup.appendChild(iframeGroupContainer);
+                });
             });
-
-            leftButton.style.display = currentGroupIndex > 0 ? 'block' : 'none';
-            rightButton.style.display = end < urls.length ? 'block' : 'none';
         }
 
-        function nextGroup() {
-            const resource = iframeSets.find(r => r.urls.includes(iframeGroup.firstChild.src));
-            if ((currentGroupIndex + 1) * 3 < resource.urls.length) {
-                currentGroupIndex++;
-                updateIframes(resource.urls);
+        // Загрузка всех слайдов
+        loadAllSlides();
+
+        // Управление скрытием шапки при прокрутке
+        let lastScrollTop = 0;
+        window.addEventListener('scroll', function () {
+            let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+            if (currentScroll > lastScrollTop) {
+                header.style.top = "-80px"; // Скрыть шапку при прокрутке вниз
+            } else {
+                header.style.top = "0"; // Показать шапку при прокрутке вверх
             }
-        }
-
-        function prevGroup() {
-            if (currentGroupIndex > 0) {
-                currentGroupIndex--;
-                const resource = iframeSets.find(r => r.urls.includes(iframeGroup.firstChild.src));
-                updateIframes(resource.urls);
-            }
-        }
+            lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+        });
     </script>
 </body>
 </html>
