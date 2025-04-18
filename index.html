@@ -64,6 +64,13 @@
         .iframe-group {
             position: relative;
         }
+
+        @media (max-width: 768px) {
+            iframe {
+                width: 100%;  /* Ширина остаётся на 100%, но */
+                height: auto;  /* Высота будет адаптироваться под контент */
+            }
+        }
     </style>
 </head>
 <body>
@@ -85,7 +92,7 @@
             {
                 category: 'Часовой анализ',
                 urls: [
-                    "https://lookerstudio.google.com/embed/reporting/150c3245-728e-484a-950b-fb74a73c9b9c/page/p_cqe8vg9fnd",
+                    "https://lookerstudio.google.com/embed/reporting/150c3245-728e-484a-950b-fb74a73c9b9c/page/p_9zgfdyu8nd",
                     "https://lookerstudio.google.com/embed/reporting/150c3245-728e-484a-950b-fb74a73c9b9c/page/iqA7D",
                     "https://lookerstudio.google.com/embed/reporting/150c3245-728e-484a-950b-fb74a73c9b9c/page/p_bvny49sqmd",
                     "https://lookerstudio.google.com/embed/reporting/150c3245-728e-484a-950b-fb74a73c9b9c/page/p_xcxkqhvxjd",
